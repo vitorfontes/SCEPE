@@ -1,0 +1,117 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid mt-5">
+  <h3 class="d-inline-block">Catálogo de produtos</h3>
+  <button class="btn btn-sm btn-primary float-right" (click)="openModal(product_catalog_form_modal)">Novo</button>
+
+  <table class="table table-striped table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Cód.</th>
+        <th>Nome do produto</th>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Estoque</th>
+        <th>Status</th>
+        <th>Parcela</th>
+        <th>Data de inclusão</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of product_catalog">
+        <td>{{ product.id }}</td>
+        <td>{{ product.nome }}</td>
+        <td>{{ product.descricao }}</td>
+        <td>{{ product.valor }}</td>
+        <td>{{ product.estoque }}</td>
+        <td>{{ product.status }}</td>
+        <td>{{ product.parcela }}</td>
+        <td>{{ product.dataInclusao | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <div class="input-group input-group-sm">
+            <select class="form-control" #action (change)="set_action(action.value)">
+              <option value="---">---</option>
+              <option value="Atualizar">Atualizar</option>
+              <option value="Deletar">Deletar</option>
+            </select>
+            <div class="input-group-append" (click)="execute_action(product, product_catalog_form_modal, delete_modal)">
+              <span class="input-group-text" id="action">OK</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #product_catalog_form_modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ modal_title_text }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="productCatalogForm" autocomplete="off">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="nome">Nome do produto</label>
+          <input type="text" class="form-control form-control-sm" id="nome" formControlName="nome">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="descricao">Qtds</label>
+          <input type="number" class="form-control form-control-sm" id="descricao" formControlName="descricao">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="valor">Valor</label>
+          <input type="number" class="form-control form-control-sm" id="valor" formControlName="valor">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="estoque">Estoque</label>
+          <input type="number" class="form-control form-control-sm" id="estoque" formControlName="estoque">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="status">Status</label>
+          <select class="form-control form-control-sm" id="status" formControlName="status">
+            <option value="Ativo">Ativo</option>
+            <option value="Inativo">Inativo</option>
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="parcela">Parcela</label>
+          <input type="number" class="form-control form-control-sm" id="parcela" formControlName="parcela">
+        </div>
+      </div>
+
+      <div class="btn-group btn-group-sm d-flex justify-content-between" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-sm btn-secondary col-md-6 mr-2">Cancelar</button>
+        <button type="button" class="btn btn-sm btn-success col-md-6" *ngIf="!update_flag; else update_template"
+          [disabled]="productCatalogForm.invalid" (click)="postProductCatalog()">Salvar</button>
+        <ng-template #update_template>
+          <button type="button" class="btn btn-sm btn-success col-md-6" [disabled]="productCatalogForm.invalid"
+            (click)="putProductCatalog()">Update</button>
+        </ng-template>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #delete_modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Deletar pedido</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5>Deseja realmente deletar o registro deste funcionário?</h5>
+    <button type="button" class="btn btn-sm btn-success d-block col" (click)="deleteProductCatalog()">Excluir</button>
+  </div>
+</ng-template>

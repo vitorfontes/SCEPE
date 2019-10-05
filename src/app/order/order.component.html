@@ -1,0 +1,98 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid mt-5">
+  <h3 class="d-inline-block">Pedidos</h3>
+  <button class="btn btn-sm btn-primary float-right" (click)="openModal(order_form_modal)">Novo</button>
+
+  <table class="table table-striped table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Cód.</th>
+        <th>Cliente</th>
+        <th>Valor</th>
+        <th>Desconto</th>
+        <th>Data</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.idPedido }}</td>
+        <td>{{ order.nomeCliente }}</td>
+        <td>{{ order.valorPedido | currency:'BRL' }}</td>
+        <td>{{ order.descPedido | currency:'BRL' }}</td>
+        <td>{{ order.dataPedido | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <div class="input-group input-group-sm">
+            <select class="form-control" #action (change)="set_action(action.value)">
+              <option value="---">---</option>
+              <option value="Atualizar">Atualizar</option>
+              <option value="Deletar">Deletar</option>
+            </select>
+            <div class="input-group-append" (click)="execute_action(order, order_form_modal, delete_modal)">
+              <span class="input-group-text" id="action">OK</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #order_form_modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ modal_title_text }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="orderForm" autocomplete="off">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="nomeCliente">Nome do cliente</label>
+          <input type="text" class="form-control form-control-sm" id="nomeCliente" formControlName="nomeCliente">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="valorPedido">Valor pedido</label>
+          <input type="number" class="form-control form-control-sm" id="valorPedido" formControlName="valorPedido">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="descPedido">Desconto</label>
+          <input type="number" class="form-control form-control-sm" id="descPedido" formControlName="descPedido">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="dataPedido">Data do pedido</label>
+          <input type="date" class="form-control form-control-sm" id="dataPedido" formControlName="dataPedido">
+        </div>
+      </div>
+
+      <div class="btn-group btn-group-sm d-flex justify-content-between" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-sm btn-secondary col-md-6 mr-2">Cancelar</button>
+        <button type="button" class="btn btn-sm btn-success col-md-6" *ngIf="!update_flag; else update_template"
+          [disabled]="orderForm.invalid" (click)="postOrder()">Salvar</button>
+        <ng-template #update_template>
+          <button type="button" class="btn btn-sm btn-success col-md-6" [disabled]="orderForm.invalid"
+            (click)="putOrder()">Update</button>
+        </ng-template>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #delete_modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Deletar pedido</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5>Deseja realmente deletar o registro deste funcionário?</h5>
+    <button type="button" class="btn btn-sm btn-success d-block col" (click)="deleteOrder()">Excluir</button>
+  </div>
+</ng-template>
