@@ -19,6 +19,23 @@
   </div>
 </div> -->
 
-<div class="h-100" id="sidemenu">
+<div class="container-fluid h-100 p-0">
+  <div class="row h-100 no-gutters">
+    <div class="col-md-3 h-100">
+      <div class="h-100" id="sidemenu">
+        <h3 class="pt-5">Menu Inicial</h3>
 
+        <ul id="menu">
+          <li class="item-menu" [routerLink]="['contatos']">Contatos</li>
+          <li class="item-menu" [routerLink]="['empregados']">Funcionários</li>
+          <li class="item-menu" [routerLink]="['pedidos']">Pedidos</li>
+          <li class="item-menu" [routerLink]="['controle-estoque']">Controle de estoque</li>
+          <li class="item-menu" [routerLink]="['catalogo-produtos']">Catálogo de produtos</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <router-outlet class="float-right"></router-outlet>
+    </div>
+  </div>
 </div>

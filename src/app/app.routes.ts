@@ -10,10 +10,13 @@ import { InventoryControlComponent } from './invetory-control/inventory-control.
 
 export const ROUTES: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'contatos', component: ContactsComponent },
-  { path: 'empregados', component: EmployeesComponent },
-  { path: 'controle-estoque', component: InventoryControlComponent },
-  { path: 'homepage', component: MenuComponent },
-  { path: 'catalogo-produtos', component: ProductCatalogComponent },
-  { path: 'pedidos', component: OrderComponent }
+  {
+    path: 'homepage', component: MenuComponent, children: [
+      { path: 'contatos', component: ContactsComponent },
+      { path: 'empregados', component: EmployeesComponent },
+      { path: 'catalogo-produtos', component: ProductCatalogComponent },
+      { path: 'pedidos', component: OrderComponent },
+      { path: 'controle-estoque', component: InventoryControlComponent },
+    ]
+  },
 ]
